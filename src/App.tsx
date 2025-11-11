@@ -10,6 +10,7 @@ import Properties from "./pages/Properties";
 import Clients from "./pages/Clients";
 import Team from "./pages/Team";
 import Collections from "./pages/Collections";
+import Tasks from "./pages/Tasks";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,10 +32,11 @@ const App = () => (
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/properties" element={<Properties />} />
-                  <Route path="/clients" element={<Clients />} />
-                  <Route path="/team" element={<Team />} />
-                  <Route path="/collections" element={<Collections />} />
-                  <Route path="*" element={<NotFound />} />
+              <Route path="/clients" element={<Clients />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
             </div>
