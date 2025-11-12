@@ -5,9 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import Dashboard from "./pages/Dashboard";
 import Properties from "./pages/Properties";
+import PropertyDetail from "./pages/PropertyDetail";
 import Clients from "./pages/Clients";
+import ClientDetail from "./pages/ClientDetail";
 import Team from "./pages/Team";
 import Collections from "./pages/Collections";
 import Tasks from "./pages/Tasks";
@@ -29,15 +30,16 @@ const App = () => (
                 <SidebarTrigger />
               </header>
               <main className="flex-1 p-6">
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/properties" element={<Properties />} />
-              <Route path="/clients" element={<Clients />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/collections" element={<Collections />} />
-              <Route path="/tasks" element={<Tasks />} />
-              <Route path="*" element={<NotFound />} />
-                </Routes>
+          <Routes>
+            <Route path="/" element={<Properties />} />
+            <Route path="/properties/:id" element={<PropertyDetail />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/clients/:id" element={<ClientDetail />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/collections" element={<Collections />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
               </main>
             </div>
           </div>

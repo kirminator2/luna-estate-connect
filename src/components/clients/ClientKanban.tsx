@@ -63,26 +63,26 @@ export default function ClientKanban({
         return (
           <div
             key={status}
-            className="flex flex-col gap-3 bg-card/50 rounded-lg p-4 border border-border min-h-[400px]"
+            className="flex flex-col gap-2 bg-muted/30 rounded-lg p-3 min-h-[400px]"
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(status)}
           >
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div
-                  className={`w-3 h-3 rounded-full ${statusConfig[status].color}`}
+                  className={`w-2 h-2 rounded-full ${statusConfig[status].color}`}
                 />
-                <h3 className="font-semibold text-foreground">
+                <h3 className="font-medium text-sm text-foreground">
                   {statusConfig[status].label}
                 </h3>
+                <Badge variant="secondary" className="bg-background/50 text-muted-foreground text-xs h-5">
+                  {statusClients.length}
+                </Badge>
               </div>
-              <Badge variant="secondary" className="bg-muted text-muted-foreground">
-                {statusClients.length}
-              </Badge>
             </div>
             
             {totalAmount > 0 && (
-              <div className="text-sm font-medium text-primary mb-2">
+              <div className="text-xs font-medium text-primary mb-3 px-1">
                 {(totalAmount / 1000000).toFixed(1)}M ₽
               </div>
             )}

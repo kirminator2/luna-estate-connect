@@ -1,4 +1,4 @@
-import { Home, Building2, Users, UserPlus, Send, LayoutDashboard, CheckSquare } from "lucide-react";
+import { Home, Building2, Users, UserPlus, Send, CheckSquare, FolderOpen } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
   Sidebar,
@@ -13,12 +13,11 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Дашборд", url: "/", icon: LayoutDashboard },
-  { title: "Недвижимость", url: "/properties", icon: Building2 },
+  { title: "Недвижимость", url: "/", icon: Building2 },
   { title: "Клиенты", url: "/clients", icon: Users },
   { title: "Задачи", url: "/tasks", icon: CheckSquare },
   { title: "Команда", url: "/team", icon: UserPlus },
-  { title: "Подборки", url: "/collections", icon: Send },
+  { title: "Подборки", url: "/collections", icon: FolderOpen },
 ];
 
 export function AppSidebar() {

@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Mail, Phone, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TaskFormSheet from "./TaskFormSheet";
 import {
   Table,
@@ -39,6 +40,7 @@ export default function ClientList({
   const [hoveredClient, setHoveredClient] = useState<string | null>(null);
   const [taskFormOpen, setTaskFormOpen] = useState(false);
   const [selectedClientForTask, setSelectedClientForTask] = useState<Client | null>(null);
+  const navigate = useNavigate();
 
   const handleSelectAll = () => {
     if (selectedClients.length === clients.length) {
@@ -78,9 +80,10 @@ export default function ClientList({
             {clients.map((client) => (
               <TableRow
                 key={client.id}
-                className="border-border"
+                className="border-border cursor-pointer hover:bg-muted/50"
                 onMouseEnter={() => setHoveredClient(client.id)}
                 onMouseLeave={() => setHoveredClient(null)}
+                onClick={() => navigate(`/clients/${client.id}`)}
               >
                 <TableCell>
                   <Checkbox
@@ -92,6 +95,7 @@ export default function ClientList({
                         setSelectedClients([...selectedClients, client.id]);
                       }
                     }}
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </TableCell>
                 <TableCell className="font-medium text-foreground">
@@ -132,7 +136,10 @@ export default function ClientList({
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => handleCreateTask(client)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCreateTask(client);
+                      }}
                       className="hover:bg-primary/20"
                     >
                       <Plus className="h-4 w-4" />

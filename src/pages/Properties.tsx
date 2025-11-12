@@ -1,9 +1,12 @@
-import { Search, Filter, MapPin, Bed, Bath, Square } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Search, Filter, MapPin, Home, Bath, Maximize, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default function Properties() {
+  const navigate = useNavigate();
   const properties = [
     {
       id: 1,
@@ -12,7 +15,8 @@ export default function Properties() {
       location: "Москва, ЦАО",
       rooms: 3,
       bathrooms: 2,
-      area: 85,
+      area: "85 м²",
+      status: "В продаже",
       image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop"
     },
     {
@@ -22,7 +26,8 @@ export default function Properties() {
       location: "Москва, САО",
       rooms: 2,
       bathrooms: 1,
-      area: 62,
+      area: "62 м²",
+      status: "В продаже",
       image: "https://images.unsplash.com/photo-1502672260066-6bc35f0a8e6c?w=400&h=300&fit=crop"
     },
     {
@@ -32,7 +37,8 @@ export default function Properties() {
       location: "Москва, СЗАО",
       rooms: 4,
       bathrooms: 2,
-      area: 120,
+      area: "120 м²",
+      status: "В продаже",
       image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop"
     },
     {
@@ -42,7 +48,8 @@ export default function Properties() {
       location: "Москва, ЮВАО",
       rooms: 1,
       bathrooms: 1,
-      area: 42,
+      area: "42 м²",
+      status: "Забронирована",
       image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop"
     },
     {
@@ -52,7 +59,8 @@ export default function Properties() {
       location: "Москва, ЗАО",
       rooms: 3,
       bathrooms: 2,
-      area: 95,
+      area: "95 м²",
+      status: "В продаже",
       image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop"
     },
     {
@@ -62,7 +70,8 @@ export default function Properties() {
       location: "Москва, СВАО",
       rooms: 2,
       bathrooms: 1,
-      area: 55,
+      area: "55 м²",
+      status: "В продаже",
       image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&h=300&fit=crop"
     },
   ];
@@ -82,49 +91,59 @@ export default function Properties() {
             className="pl-10 bg-card border-border"
           />
         </div>
-        <Button variant="outline" className="border-border bg-card hover:bg-secondary">
+        <Button variant="outline" className="border-border bg-card hover:bg-muted">
           <Filter className="h-4 w-4 mr-2" />
           Фильтры
         </Button>
         <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+          <Plus className="h-4 w-4 mr-2" />
           Добавить объект
         </Button>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {properties.map((property) => (
-          <Card key={property.id} className="border-border bg-card overflow-hidden hover:bg-card/80 transition-colors cursor-pointer">
-            <img
-              src={property.image}
-              alt={property.title}
-              className="w-full h-48 object-cover"
-            />
+          <Card 
+            key={property.id} 
+            className="border-0 overflow-hidden hover:bg-muted/50 transition-all cursor-pointer"
+            onClick={() => navigate(`/properties/${property.id}`)}
+          >
+            <div className="aspect-video relative overflow-hidden bg-muted">
+              <img
+                src={property.image}
+                alt={property.title}
+                className="object-cover w-full h-full"
+              />
+              <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground">
+                {property.status}
+              </Badge>
+            </div>
             <CardContent className="p-4 space-y-3">
               <div>
-                <h3 className="font-semibold text-foreground">{property.title}</h3>
-                <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
-                  <MapPin className="h-3 w-3" />
-                  {property.location}
+                <h3 className="font-medium text-base text-foreground mb-1">{property.title}</h3>
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>{property.location}</span>
                 </div>
               </div>
               
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
-                  <Bed className="h-4 w-4" />
-                  {property.rooms}
+                  <Home className="h-4 w-4" />
+                  <span>{property.rooms}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Bath className="h-4 w-4" />
-                  {property.bathrooms}
+                  <span>{property.bathrooms}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Square className="h-4 w-4" />
-                  {property.area} м²
+                  <Maximize className="h-4 w-4" />
+                  <span>{property.area}</span>
                 </div>
               </div>
-
-              <div className="pt-2 border-t border-border">
-                <p className="text-xl font-bold text-primary">{property.price}</p>
+              
+              <div className="pt-2">
+                <div className="text-xl font-bold text-primary">{property.price}</div>
               </div>
             </CardContent>
           </Card>
