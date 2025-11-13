@@ -55,7 +55,7 @@ export default function ClientKanban({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
       {(Object.keys(statusConfig) as ClientStatus[]).map((status) => {
         const statusClients = getClientsForStatus(status);
         const totalAmount = getTotalAmountForStatus(status);
@@ -63,28 +63,28 @@ export default function ClientKanban({
         return (
           <div
             key={status}
-            className="flex flex-col gap-2 bg-muted/40 rounded-md p-2 min-h-[500px]"
+            className="flex flex-col gap-2 bg-muted/20 rounded-lg p-3 min-h-[600px]"
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(status)}
           >
-            <div className="flex items-center justify-between mb-2 px-1">
+            <div className="flex items-center justify-between mb-3 px-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-medium text-xs text-muted-foreground uppercase tracking-wide">
+                <h3 className="font-semibold text-sm text-foreground">
                   {statusConfig[status].label}
                 </h3>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                   {statusClients.length}
                 </span>
               </div>
             </div>
             
             {totalAmount > 0 && (
-              <div className="text-xs font-medium text-foreground/70 mb-2 px-1">
+              <div className="text-xs font-semibold text-foreground mb-3 px-1">
                 {(totalAmount / 1000000).toFixed(1)}M ₽
               </div>
             )}
 
-            <div className="flex flex-col gap-1.5 overflow-y-auto">
+            <div className="flex flex-col gap-2 overflow-y-auto">
               {statusClients.map((client) => (
                 <ClientCard
                   key={client.id}
