@@ -32,36 +32,36 @@ export default function ClientCard({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => navigate(`/clients/${client.id}`)}
-        className={`border-0 bg-card hover:bg-muted/50 transition-all cursor-pointer relative group ${
-          isSelected ? "ring-1 ring-primary" : ""
+        className={`border border-border/50 bg-card hover:shadow-sm transition-all cursor-pointer relative group ${
+          isSelected ? "ring-1 ring-foreground/20" : ""
         }`}
       >
-        <CardContent className="p-3 space-y-2">
-          <div className="flex items-start justify-between gap-2">
-            {isHovered && (
+        <CardContent className="p-2.5 space-y-2">
+          {isHovered && (
+            <div className="absolute top-2 left-2 z-10 flex gap-1">
               <Checkbox
                 checked={isSelected}
                 onCheckedChange={() => onSelect(client.id)}
                 onClick={(e) => e.stopPropagation()}
-                className="absolute top-2 left-2 z-10"
+                className="bg-background"
               />
-            )}
-            {isHovered && (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setTaskFormOpen(true);
-                }}
-                className="h-7 w-7 p-0 hover:bg-primary/20 ml-auto"
-              >
-                <Plus className="h-3.5 w-3.5" />
-              </Button>
-            )}
-          </div>
+            </div>
+          )}
+          {isHovered && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={(e) => {
+                e.stopPropagation();
+                setTaskFormOpen(true);
+              }}
+              className="absolute top-1.5 right-1.5 h-6 w-6 p-0 hover:bg-muted"
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </Button>
+          )}
 
-          <h4 className="font-medium text-sm text-foreground line-clamp-2 pt-1">
+          <h4 className="font-medium text-sm text-foreground line-clamp-2 pr-8">
             {client.name}
           </h4>
 
@@ -76,12 +76,12 @@ export default function ClientCard({
             </div>
           </div>
 
-          <div className="text-xs text-muted-foreground pt-1.5">
+          <div className="text-xs text-muted-foreground">
             {client.budget}
           </div>
 
           {client.dealAmount && (
-            <div className="text-sm font-semibold text-primary pt-1">
+            <div className="text-sm font-medium text-foreground">
               {(client.dealAmount / 1000000).toFixed(1)}M ₽
             </div>
           )}

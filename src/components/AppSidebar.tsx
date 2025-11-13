@@ -1,5 +1,6 @@
 import { Home, Building2, Users, UserPlus, Send, CheckSquare, FolderOpen } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   Sidebar,
   SidebarContent,
@@ -10,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 
 const menuItems = [
@@ -24,9 +26,12 @@ export function AppSidebar() {
   return (
     <Sidebar className="border-r border-border">
       <SidebarHeader className="border-b border-border p-4">
-        <div className="flex items-center gap-2">
-          <Home className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold text-foreground">RealtyHub</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Home className="h-6 w-6 text-foreground" />
+            <span className="text-lg font-bold text-foreground">RealtyHub</span>
+          </div>
+          <ThemeToggle />
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -40,8 +45,8 @@ export function AppSidebar() {
                     <NavLink
                       to={item.url}
                       end
-                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary"
-                      activeClassName="bg-secondary text-primary font-medium"
+                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted"
+                      activeClassName="bg-muted text-foreground font-medium"
                     >
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
