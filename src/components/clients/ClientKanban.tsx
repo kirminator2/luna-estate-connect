@@ -26,6 +26,8 @@ export default function ClientKanban({
   setSelectedClients,
 }: ClientKanbanProps) {
   const [draggedClient, setDraggedClient] = useState<string | null>(null);
+  const [dragOverColumn, setDragOverColumn] = useState<ClientStatus | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const getClientsForStatus = (status: ClientStatus) => {
     return clients.filter((c) => c.status === status);
@@ -39,19 +41,54 @@ export default function ClientKanban({
     setDraggedClient(clientId);
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
+  const handleDragEnd = () => {
+    setDraggedClient(null);
+    setDragOverColumn(null);
+    setDragOverIndex(null);
   };
 
-  const handleDrop = (status: ClientStatus) => {
+  const handleDragOverColumn = (e: React.DragEvent, status: ClientStatus) => {
+    e.preventDefault();
+    setDragOverColumn(status);
+  };
+
+  const handleDragLeaveColumn = () => {
+    setDragOverColumn(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragOverCard = (e: React.DragEvent, index: number, status: ClientStatus) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverColumn(status);
+    setDragOverIndex(index);
+  };
+
+  const handleDrop = (status: ClientStatus, dropIndex?: number) => {
     if (!draggedClient) return;
 
-    setClients(
-      clients.map((c) =>
-        c.id === draggedClient ? { ...c, status } : c
-      )
-    );
-    setDraggedClient(null);
+    const draggedClientData = clients.find(c => c.id === draggedClient);
+    if (!draggedClientData) return;
+
+    // Remove dragged client from list
+    const withoutDragged = clients.filter(c => c.id !== draggedClient);
+    
+    // Update status
+    const updatedClient = { ...draggedClientData, status };
+    
+    // Get clients in target column
+    const columnClients = withoutDragged.filter(c => c.status === status);
+    const otherClients = withoutDragged.filter(c => c.status !== status);
+    
+    // Insert at specific position if dropIndex provided
+    if (dropIndex !== undefined && dropIndex !== null) {
+      columnClients.splice(dropIndex, 0, updatedClient);
+    } else {
+      columnClients.push(updatedClient);
+    }
+    
+    setClients([...otherClients, ...columnClients]);
+    handleDragEnd();
   };
 
   return (
@@ -63,8 +100,13 @@ export default function ClientKanban({
         return (
           <div
             key={status}
-            className="flex flex-col gap-2 bg-muted/20 rounded-lg p-3 min-h-[600px]"
-            onDragOver={handleDragOver}
+            className={`flex flex-col gap-2 rounded-lg p-3 min-h-[600px] transition-all duration-200 ${
+              dragOverColumn === status 
+                ? "bg-primary/10 ring-2 ring-primary/30" 
+                : "bg-muted/20"
+            }`}
+            onDragOver={(e) => handleDragOverColumn(e, status)}
+            onDragLeave={handleDragLeaveColumn}
             onDrop={() => handleDrop(status)}
           >
             <div className="flex items-center justify-between mb-3 px-1">
@@ -85,21 +127,35 @@ export default function ClientKanban({
             )}
 
             <div className="flex flex-col gap-2 overflow-y-auto">
-              {statusClients.map((client) => (
-                <ClientCard
-                  key={client.id}
-                  client={client}
-                  isSelected={selectedClients.includes(client.id)}
-                  onSelect={(id) => {
-                    if (selectedClients.includes(id)) {
-                      setSelectedClients(selectedClients.filter((cid) => cid !== id));
-                    } else {
-                      setSelectedClients([...selectedClients, id]);
-                    }
-                  }}
-                  onDragStart={handleDragStart}
-                />
+              {statusClients.map((client, index) => (
+                <div key={client.id}>
+                  {dragOverColumn === status && dragOverIndex === index && draggedClient !== client.id && (
+                    <div className="h-[200px] bg-primary/5 border-2 border-dashed border-primary/30 rounded-lg mb-2 animate-fade-in" />
+                  )}
+                  <div
+                    onDragOver={(e) => handleDragOverCard(e, index, status)}
+                    onDrop={() => handleDrop(status, index)}
+                  >
+                    <ClientCard
+                      client={client}
+                      isSelected={selectedClients.includes(client.id)}
+                      onSelect={(id) => {
+                        if (selectedClients.includes(id)) {
+                          setSelectedClients(selectedClients.filter((cid) => cid !== id));
+                        } else {
+                          setSelectedClients([...selectedClients, id]);
+                        }
+                      }}
+                      onDragStart={handleDragStart}
+                      onDragEnd={handleDragEnd}
+                      isDragging={draggedClient === client.id}
+                    />
+                  </div>
+                </div>
               ))}
+              {dragOverColumn === status && dragOverIndex === statusClients.length && (
+                <div className="h-[200px] bg-primary/5 border-2 border-dashed border-primary/30 rounded-lg animate-fade-in" />
+              )}
             </div>
           </div>
         );

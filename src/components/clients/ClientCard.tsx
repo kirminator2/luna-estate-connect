@@ -12,6 +12,8 @@ interface ClientCardProps {
   isSelected: boolean;
   onSelect: (id: string) => void;
   onDragStart: (id: string) => void;
+  onDragEnd: () => void;
+  isDragging: boolean;
 }
 
 export default function ClientCard({
@@ -19,6 +21,8 @@ export default function ClientCard({
   isSelected,
   onSelect,
   onDragStart,
+  onDragEnd,
+  isDragging,
 }: ClientCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [taskFormOpen, setTaskFormOpen] = useState(false);
@@ -29,12 +33,18 @@ export default function ClientCard({
       <Card
         draggable
         onDragStart={() => onDragStart(client.id)}
+        onDragEnd={onDragEnd}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => navigate(`/clients/${client.id}`)}
-        className={`border-0 bg-card hover:bg-accent/30 transition-all cursor-pointer relative group shadow-sm ${
+        className={`border-0 bg-card hover:bg-accent/30 transition-all cursor-move relative group shadow-sm ${
           isSelected ? "ring-2 ring-primary/20" : ""
+        } ${
+          isDragging ? "opacity-40 scale-95 rotate-2 shadow-2xl" : ""
         }`}
+        style={{
+          transition: isDragging ? "none" : "all 0.2s ease"
+        }}
       >
         <CardContent className="p-3 space-y-3">
           {/* Actions bar - fixed height to prevent jumps */}
